@@ -1,6 +1,10 @@
 stage 'build' 
 	node('TestSlave1') {
-		checkout([$class: 'GitSCM', branches: [[name: '*/JenkinsTest']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[url: 'https://github.com/alan-wu/manage.git']]])
+	   withEnv(["https_proxy=http://proxy.bioeng.auckland.ac.nz:8080"]) {
+	   	checkout([$class: 'GitSCM', branches: [[name: '*/JenkinsTest']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[url: 'https://github.com/alan-wu/manage.git']]])
+	   }
+
+
 		echo 'Checked out'
 		dir('build') {
 			echo 'In the build directory'

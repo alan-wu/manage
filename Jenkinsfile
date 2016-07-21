@@ -1,6 +1,7 @@
 stage 'build' 
 	node('TestSlave1') {
 		sh 'sudo /home/mwu035/Jenkins/sudo_to_opencmiss.sh'
+		echo 'here'
 		dir('/home/opencmiss/Jenkins') {
 			   	checkout([$class: 'GitSCM', branches: [[name: '*/JenkinsTest']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[url: 'https://github.com/alan-wu/manage.git']]])
 		

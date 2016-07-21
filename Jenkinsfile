@@ -11,6 +11,7 @@ stage 'build'
 			sh 'make'
 			echo 'Built'
 			step([$class: 'GitHubCommitStatusSetter', statusResultSource: [$class: 'ConditionalStatusResultSource', results: [[$class: 'BetterThanOrEqualBuildResult', message: 'Build succeeded.', result: 'SUCCESS', state: 'SUCCESS']]]])
-			echo 'done'		
+			echo 'done'
+			echo 'test'		
 }
 	}

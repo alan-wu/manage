@@ -1,4 +1,6 @@
 stage 'build' 
+
+parallel 'buildOnSlave1':{
 	node('TestSlave1') {
 	   	checkout([$class: 'GitSCM', branches: [[name: '*/JenkinsTest']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[url: 'https://github.com/alan-wu/manage.git']]])
 
@@ -13,6 +15,7 @@ stage 'build'
 			echo 'test'		
 		}
 	}
+}, 'buildOnSlave2':{
 	node('TestSlave2') {
 	   	checkout([$class: 'GitSCM', branches: [[name: '*/JenkinsTest']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[url: 'https://github.com/alan-wu/manage.git']]])
 
@@ -26,3 +29,4 @@ stage 'build'
 			echo 'test'		
 		}
 	}
+}

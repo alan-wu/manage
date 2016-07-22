@@ -1,6 +1,6 @@
 stage 'build' 
 
-parallel 'buildOnSlave1':{
+parallel 'Slave1':{
 	node('TestSlave1') {
 	   	checkout([$class: 'GitSCM', branches: [[name: '*/JenkinsTest']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[url: 'https://github.com/alan-wu/manage.git']]])
 
@@ -15,7 +15,7 @@ parallel 'buildOnSlave1':{
 			echo 'test'		
 		}
 	}
-}, 'buildOnSlave2':{
+}, 'Slave2':{
 	node('TestSlave2') {
 	   	checkout([$class: 'GitSCM', branches: [[name: '*/JenkinsTest']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[url: 'https://github.com/alan-wu/manage.git']]])
 
@@ -27,6 +27,27 @@ parallel 'buildOnSlave1':{
 			step([$class: 'GitHubCommitStatusSetter', statusResultSource: [$class: 'ConditionalStatusResultSource', results: [[$class: 'BetterThanOrEqualBuildResult', message: 'Build succeeded.', result: 'SUCCESS', state: 'SUCCESS']]]])
 			echo 'done'
 			echo 'test'		
+		}
+	}
+}
+
+stage 'tests'
+
+parallel 'Slave1':{
+	node('TestSlave1') {
+		echo 'Zinc tests'
+		dir('../build/x86_64_linux/gnu-C4.8-gnu-F4.8/no_mpi/zinc/release') {
+			sh 'make test'
+		}
+		echo 'iron tests'
+		dir('../build/x86_64_linux/gnu-C4.8-gnu-F4.8/openmpi_release/iron/release') {
+			sh 'make test'
+		}
+	}
+}, 'Slave2':{
+	node('TestSlave2') {
+		dir('./build/x86_64_linux/gnu-C4.8-gnu-F4.8/no_mpi/zinc/release') {
+			sh 'make test'
 		}
 	}
 }

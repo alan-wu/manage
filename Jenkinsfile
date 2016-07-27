@@ -2,12 +2,13 @@ stage 'build'
 
 parallel 'Slave1':{
 	node('TestSlave1') {
-	   	checkout([$class: 'GitSCM', branches: [[name: '*/JenkinsTest']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[url: 'https://github.com/alan-wu/manage.git']]])
-
+		dir('./oc/manage') {
+		   	checkout([$class: 'GitSCM', branches: [[name: '*/JenkinsTest']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[url: 'https://github.com/alan-wu/manage.git']]])
+	}
 		echo 'Checked out'
-		dir('./build') {
+		dir('./oc/manage/build') {
 			echo 'In the build directory'
-			sh '../../../../../cmake-3.4.3-Linux-x86_64/bin/cmake -DMPI=openmpi -DMPI_HOME="" -DSYSTEM_MPI=NO -DEVIL=YES -DOC_PYTHON_BINDINGS_USE_VIRTUALENV=NO ..'
+			sh '../../../../../../../cmake-3.4.3-Linux-x86_64/bin/cmake -DMPI=openmpi -DMPI_HOME="" -DSYSTEM_MPI=NO -DEVIL=YES -DOC_PYTHON_BINDINGS_USE_VIRTUALENV=NO ..'
 			sh 'make'
 			echo 'Built'
 			echo 'done'
@@ -16,23 +17,15 @@ parallel 'Slave1':{
 	}
 }, 'Slave2':{
 	node('TestSlave2') {
-	   	checkout([$class: 'GitSCM', branches: [[name: '*/JenkinsTest']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[url: 'https://github.com/alan-wu/manage.git']]])
-
-		echo 'Checked out'
-		dir('./build') {
-			sh '../../../../../cmake-3.4.3-Linux-x86_64/bin/cmake -DMPI=openmpi -DMPI_HOME="" -DSYSTEM_MPI=NO -DEVIL=YES -DOC_PYTHON_BINDINGS_USE_VIRTUALENV=NO ..'
-			sh 'make'
-			echo 'Built'
-			echo 'done'
-			echo 'test'		
-		}
+		echo 'HPC Disabled'
 	}
 }, 'Slave3':{
 	node('TestSlave3') {
-	   	checkout([$class: 'GitSCM', branches: [[name: '*/JenkinsTest']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[url: 'https://github.com/alan-wu/manage.git']]])
-
+		dir('./oc/manage') {
+		   	checkout([$class: 'GitSCM', branches: [[name: '*/JenkinsTest']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[url: 'https://github.com/alan-wu/manage.git']]])
+		}
 		echo 'Checked out'
-		dir('./build') {
+		dir('./oc/manage/build') {
 			sh '/Users/mwu035/cmake-3.6.1/CMake.app/Contents/bin/cmake -DEVIL=YES  -DBUILD_TESTS=OFF ..'
 			sh 'make'
 			echo 'Built'
@@ -49,18 +42,23 @@ stage 'tests'
 parallel 'Slave1':{
 	node('TestSlave1') {
 		echo 'Zinc tests'
-		dir('../build/x86_64_linux/gnu-C4.8-gnu-F4.8/no_mpi/zinc/release') {
+		dir('./oc/build/x86_64_linux/gnu-C4.8-gnu-F4.8/no_mpi/zinc/release') {
 			sh 'make test'
 		}
 		echo 'iron tests'
-		dir('../build/x86_64_linux/gnu-C4.8-gnu-F4.8/openmpi_release/iron/release') {
+		dir('./oc/build/x86_64_linux/gnu-C4.8-gnu-F4.8/openmpi_release/iron/release') {
 			sh 'make test'
 		}
 	}
 }, 'Slave2':{
 	node('TestSlave2') {
-		dir('./build/x86_64_linux/gnu-C4.8-gnu-F4.8/no_mpi/zinc/release') {
-			sh 'make test'
+		echo 'HPC Disabled'
+	}
+}, 'Slave3':{
+	node('TestSlave3') {
+		echo 'Zinc tests'
+		dir('./oc/build/x86_64_darwin/clang-C6.0-gnu-F4.5/no_mpi/zinc/release') {
+		   	sh 'make test'
 		}
 	}
 }

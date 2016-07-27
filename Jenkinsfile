@@ -33,7 +33,7 @@ parallel 'Slave1':{
 
 		echo 'Checked out'
 		dir('./build') {
-			sh '/Users/mwu035/cmake-3.6.1/CMake.app/Contents/bin/cmake -DEVIL=YES  ..'
+			sh '/Users/mwu035/cmake-3.6.1/CMake.app/Contents/bin/cmake -DEVIL=YES  -DBUILD_TESTS=OFF ..'
 			sh 'make'
 			echo 'Built'
 			echo 'done'

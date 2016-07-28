@@ -26,7 +26,7 @@ parallel 'Slave1':{
 		}
 		echo 'Checked out'
 		dir('./oc/manage/build') {
-			sh '/Users/mwu035/cmake-3.6.1/CMake.app/Contents/bin/cmake -DEVIL=YES  -DBUILD_TESTS=OFF ..'
+			sh '/Users/mwu035/cmake-3.6.1/CMake.app/Contents/bin/cmake -DEVIL=YES  -DOC_USE_GTEST=YES -DOC_BUILD_ZINC_TESTS=YES -DBUILD_TESTS=OFF ..'
 			sh 'make'
 			echo 'Built'
 			echo 'done'

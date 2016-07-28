@@ -33,7 +33,7 @@ stage 'make'
 parallel 'Slave1':{
 	node('TestSlave1') {
 		dir('./oc/manage/build') {
-			sh 'make'
+			sh 'make opencmiss'
 			echo 'Built'		
 		}
 	}
@@ -44,7 +44,7 @@ parallel 'Slave1':{
 }, 'Slave3':{
 	node('TestSlave3') {
 		dir('./oc/manage/build') {
-			sh 'make'
+			sh 'make opencmiss'
 			echo 'Built'
 			echo 'done'
 			echo 'test'		
